@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/api/loans")
 @RequiredArgsConstructor
@@ -23,5 +25,13 @@ public class LoanController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(responseMessage);
+    }
+
+    @GetMapping("/status")
+    public ResponseEntity<?> getLoanStatus(
+            @RequestParam(required = false) Long loanId) {
+        Optional<LoanDO> loanStatus = loanService.getLoanStatusById(loanId);
+        return loanStatus.map(loan -> ResponseEntity.ok().body(loan.getStatus()))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
