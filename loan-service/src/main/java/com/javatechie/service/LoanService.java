@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -51,6 +52,10 @@ public class LoanService {
         log.info("Loan application event published to Kafka | topic: {}, loanId: {}", loanProcessingTopic, savedLoan.getLoanId());
 
         return loanTransactionId;
+    }
+
+    public Optional<LoanDO> getLoanStatusById(Long loanId) {
+        return loanRepository.findById(loanId);
     }
 
 }
